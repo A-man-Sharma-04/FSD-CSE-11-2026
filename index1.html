@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Fetch</title>
+  <style>
+    table {
+      border: 2px solid red;
+      width: 80vw;
+      margin: auto;
+      border-collapse: collapse;
+    }
+    th,
+    td {
+      border: 2px solid green;
+      padding: 8px;
+      text-align: center;
+    }
+    img {
+      object-fit: contain;
+    }
+  </style>
+  <script>
+    const PRODUCT_URL =
+      "https://dummyjson.com/products?limit=10&skip=2";
+    // Get USD to INR exchange rate
+    async function getExchangeRate() {
+      try {
+        const URL = "https://open.er-api.com/v6/latest/USD";
+        const res = await fetch(URL);
+        const data = await res.json();
+        console.log("rate", data.rates.INR);
+        return Number(data.rates.INR);
+      } catch (error) {
+        console.log("Currency API Error", error);
+      }
+    }
+    async function loadProducts() {
+      try {
+        const rate = await getExchangeRate();
+        const response = await fetch(PRODUCT_URL);
+        if (!response.ok) {
+          throw new Error("Product API failed");
+        }
+        const data = await response.json();
+        let rows = "";
+        data.products.forEach((product, index) => {
+          const priceInINR = product.price * rate;
+          rows += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${product.title}</td>
+              <td>
+                <img
+                  src="${product.thumbnail}"
+                  width="100"
+                  height="100"
+                  alt="${product.title}"
+                >
+              </td>
+              <td>${product.category}</td>
+              <td>${product.rating}</td>
+              <td>₹${priceInINR.toFixed(2)}</td>
+              <td>${product.stock}</td>
+              <td>
+  <button onclick="addToCart(${product.id})">
+    Add to Cart
+  </button>
+</td>
+            </tr>
+          `;
+        });
+        document.getElementById("data").innerHTML = rows;
+      } catch (error) {
+        console.error("Error:", error);
+        document.getElementById("data").innerHTML = `
+          <tr>
+            <td colspan="7">
+              Failed to load products.
+            </td>
+          </tr>
+        `;
+      }
+    }
+    // Start application
+    loadProducts();
+  </script>
+</head>
+<body>
+  <h1 style="text-align: center;">
+    List of Products
+  </h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Sr.No</th>
+        <th>Title</th>
+        <th>Image</th>
+        <th>Category</th>
+        <th>Rating</th>
+        <th>Price (INR)</th>
+        <th>Stock</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="data">
+    </tbody>
+  </table>
+</body>
+</html>
