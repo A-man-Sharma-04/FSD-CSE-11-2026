@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book App</title>
+    <style>
+       .card {
+        width:200px;
+        height:200px;
+        background-color:aqua;
+        border: 2px solid black;
+        border-radius:20px;
+        margin:auto;
+        text-align:center;
+        padding:10px;
+       }
+       #root{
+        display:flex;
+        flex-wrap:wrap;
+        row-gap:20px;
+       }
+    </style>
+</head>
+<body>
+    <h2><center>Book Store</center></h2>
+    <button onclick="viewCart()">View Cart</button>
+    <div id="root"></div>
+    <div id="cart"></div>
+</body>
+<script src="./bookapp.js"></script>
+</html>
