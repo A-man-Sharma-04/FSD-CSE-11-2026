@@ -1,0 +1,15 @@
+.btn {
+    width: 100px;
+    height:100px;
+    background-color:black;
+    color:white;
+    font: size 32px;
+    border-radius:20px;
+}
+.id {
+    font-size: 32px;
+    text-align: center;
+    margin: 0 20px; 
+    border: 2px solid black;
+    background-color: white;
+}
